@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Member Registration Form</title>
+<style>
+  /* ============ BASE ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brand: #128C7E;          /* WhatsApp teal */
+    --brand-dark: #075E54;
+    --accent: #25D366;         /* WhatsApp green */
+    --danger: #e63946;
+    --ink: #10231f;
+    --muted: #6b7c79;
+    --line: #dbe6e4;
+    --bg: #eef5f3;
+    --card: #ffffff;
+  }
+
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(1000px 500px at 10% -10%, #d8efe8 0%, transparent 60%),
+      radial-gradient(900px 500px at 110% 0%, #d9f2dd 0%, transparent 55%),
+      var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 28px 14px 60px;
+    line-height: 1.5;
+  }
+
+  /* ============ CARD ============ */
+  .wrapper { width: 100%; max-width: 860px; }
+
+  .card {
+    background: var(--card);
+    border-radius: 22px;
+    box-shadow: 0 18px 45px rgba(7, 94, 84, .13), 0 2px 6px rgba(0,0,0,.04);
+    overflow: hidden;
+    border: 1px solid rgba(18,140,126,.10);
+  }
+
+  /* ---- Header ---- */
+  .card-header {
+    background: linear-gradient(135deg, var(--brand-dark), var(--brand) 55%, #1fa87a);
+    color: #fff;
+    padding: 30px 30px 26px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-header::after {
+    content: "";
+    position: absolute;
+    right: -60px; top: -70px;
+    width: 220px; height: 220px;
+    background: rgba(255,255,255,.09);
+    border-radius: 50%;
+  }
+  .card-header::before {
+    content: "";
+    position: absolute;
+    right: 60px; bottom: -90px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,.07);
+    border-radius: 50%;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.28);
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .card-header h1 { font-size: 25px; font-weight: 700; letter-spacing: -.3px; }
+  .card-header p { font-size: 14px; opacity: .88; margin-top: 6px; max-width: 520px; }
+
+  /* ---- Form body ---- */
+  form { padding: 28px 30px 34px; }
+
+  .section {
+    margin-bottom: 26px;
+    padding-bottom: 22px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .section:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 18px; }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    color: var(--brand-dark);
+    margin-bottom: 16px;
+  }
+  .section-title .dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(37,211,102,.16);
+    flex-shrink: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+  }
+  .full { grid-column: 1 / -1; }
+
+  /* ---- Fields ---- */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  .field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #26433e;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .req { color: var(--danger); font-weight: 700; }
+  .opt {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: #f0f5f4;
+    border: 1px solid var(--line);
+    padding: 1px 7px;
+    border-radius: 999px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: #fbfdfc;
+    border: 1.6px solid var(--line);
+    border-radius: 10px;
+    padding: 11px 13px;
+    transition: border-color .18s, box-shadow .18s, background .18s;
+    outline: none;
+  }
+  textarea { resize: vertical; min-height: 74px; }
+
+  input::placeholder, textarea::placeholder { color: #9fb0ad; }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--brand);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(18,140,126,.13);
+  }
+
+  select { appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7c79' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 13px center;
+    padding-right: 38px;
+  }
+
+  /* invalid state */
+  .field.error input,
+  .field.error select,
+  .field.error textarea { border-color: var(--danger); background: #fff6f6; }
+  .err-msg {
+    font-size: 12px;
+    color: var(--danger);
+    font-weight: 600;
+    display: none;
+  }
+  .field.error .err-msg { display: block; }
+
+  /* ---- Buttons ---- */
+  .actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  button {
+    font: inherit;
+    font-weight: 700;
+    font-size: 15px;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 22px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    transition: transform .15s, box-shadow .18s, filter .18s;
+  }
+  button:active { transform: translateY(1px) scale(.995); }
+  button:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+  .btn-submit {
+    flex: 1 1 240px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--brand), var(--accent));
+    box-shadow: 0 10px 22px rgba(18,140,126,.28);
+  }
+  .btn-submit:hover:not(:disabled) { filter: brightness(1.06); box-shadow: 0 13px 26px rgba(18,140,126,.34); }
+
+  .btn-reset {
+    flex: 0 0 auto;
+    background: #f2f7f6;
+    color: #38544f;
+    border: 1.6px solid var(--line);
+  }
+  .btn-reset:hover { background: #e8f1ef; }
+
+  /* ---- Spinner ---- */
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2.5px solid rgba(255,255,255,.45);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    display: none;
+  }
+  button.loading .spinner { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---- Status message ---- */
+  .status {
+    margin-top: 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 12px 15px;
+    border-radius: 11px;
+    display: none;
+    align-items: flex-start;
+    gap: 9px;
+  }
+  .status.show { display: flex; }
+  .status.success { background: #e6f9ee; color: #0b6b3a; border: 1px solid #b7e9cd; }
+  .status.error   { background: #fdecec; color: #a01c28; border: 1px solid #f6c6c9; }
+  .status.info    { background: #eaf4ff; color: #17518f; border: 1px solid #c3ddf8; }
+
+  .note {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 18px;
+    line-height: 1.6;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 620px) {
+    body { padding: 14px 10px 40px; }
+    .card-header { padding: 24px 20px 22px; }
+    .card-header h1 { font-size: 20px; }
+    form { padding: 22px 18px 26px; }
+    .grid { grid-template-columns: 1fr; gap: 14px; }
+    .btn-reset { flex: 1 1 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div class="card">
+
+    <!-- ================= HEADER ================= -->
+    <div class="card-header">
+      <span class="badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20z"/></svg>
+        Registration
+      </span>
+      <h1>Member Information Form</h1>
+      <p>Kindly fill in your details correctly. Your submission is delivered straight to our WhatsApp.</p>
+    </div>
+
+    <!-- ================= FORM ================= -->
+    <form id="regForm" novalidate>
+
+      <!-- ---------- PERSONAL ---------- -->
+      <div class="section">
+        <div class="section-title"><span class="dot"></span> Personal Details</div>
+
+        <div class="grid">
+          <div class="field full" id="f_fullNames">
+            <label for="fullNames">Full Names <span class="req">*</span></label>
+            <input type="text" id="fullNames" name="fullNames" placeholder="e.g. Adewale Johnson Okafor" autocomplete="name" />
+            <span class="err-msg">Please enter your full names.</span>
+          </div>
+
+          <div class="field full" id="f_email">
+            <label for="email">Email Address <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="e.g. you@example.com" autocomplete="email" inputmode="email" />
+            <span class="err-msg">Please enter a valid email address.</span>
+          </div>
+
+          <div class="field" id="f_lga">
+            <label for="lga">Local Government of Origin <span class="req">*</span></label>
+            <input type="text" id="lga" name="lga" placeholder="e.g. Egor L.G.A." />
+            <span class="err-msg">Please enter your local government of origin.</span>
+          </div>
+
+          <div class="field" id="f_location">
+            <label for="location">Present Location / Residence <span class="req">*</span></label>
+            <input type="text" id="location" name="location" placeholder="e.g. 12 Airport Road, Benin City" />
+            <span class="err-msg">Please enter your present location.</span>
+          </div>
+
+          <div class="field" id="f_occupation">
+            <label for="occupation">Occupation <span class="req">*</span></label>
+            <input type="text" id="occupation" name="occupation" placeholder="e.g. Teacher / Trader / Engineer" />
+            <span class="err-msg">Please enter your occupation.</span>
+          </div>
+
+          <div class="field" id="f_marital">
+            <label for="marital">Marital Status <span class="opt">Optional</span></label>
+            <select id="marital" name="marital">
+              <option value="">-- Select (optional) --</option>
+              <option>Single</option>
+              <option>Married</option>
+              <option>Divorced</option>
+              <option>Widowed</option>
+              <option>Separated</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- NEXT OF KIN ---------- -->
+      <div class="section">
+        <div class="section-title"><span class="dot"></span> Next of Kin Details</div>
+
+        <div class="grid">
+          <div class="field full" id="f_nokName">
+            <label for="nokName">Next of Kin (Full Name) <span class="req">*</span></label>
+            <input type="text" id="nokName" name="nokName" placeholder="e.g. Mrs. Grace Okafor" />
+            <span class="err-msg">Please enter the next of kin's full name.</span>
+          </div>
+
+          <div class="field" id="f_nokPhone">
+            <label for="nokPhone">Next of Kin Phone No. <span class="req">*</span></label>
+            <input type="tel" id="nokPhone" name="nokPhone" placeholder="e.g. 08012345678" inputmode="tel" />
+            <span class="err-msg">Enter a valid phone number (at least 10 digits).</span>
+          </div>
+
+          <div class="field" id="f_nokLocation">
+            <label for="nokLocation">Next of Kin Location <span class="req">*</span></label>
+            <input type="text" id="nokLocation" name="nokLocation" placeholder="e.g. Uselu, Benin City" />
+            <span class="err-msg">Please enter the next of kin's location.</span>
+          </div>
+
+          <div class="field full" id="f_relationship">
+            <label for="relationship">Relationship with Next of Kin <span class="req">*</span></label>
+            <select id="relationship" name="relationship">
+              <option value="">-- Select relationship --</option>
+              <option>Spouse</option>
+              <option>Father</option>
+              <option>Mother</option>
+              <option>Son</option>
+              <option>Daughter</option>
+              <option>Brother</option>
+              <option>Sister</option>
+              <option>Uncle</option>
+              <option>Aunt</option>
+              <option>Cousin</option>
+              <option>Friend</option>
+              <option>Guardian</option>
+              <option>Other</option>
+            </select>
+            <span class="err-msg">Please select your relationship with your next of kin.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- ACTIONS ---------- -->
+      <div class="actions">
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span class="spinner"></span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L0 24l6.5-1.7c1.7.9 3.7 1.4 5.6 1.4 6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.4-8.4zM12.1 21.6c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4a9.8 9.8 0 0 1-1.5-5.2c0-5.4 4.4-9.8 9.8-9.8 2.6 0 5.1 1 6.9 2.9a9.7 9.7 0 0 1 2.9 6.9c0 5.4-4.4 9.8-9.8 9.8z"/>
+            <path d="M17.4 14.3c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5s-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.4.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.3z"/>
+          </svg>
+          Submit &amp; Send to WhatsApp
+        </button>
+
+        <button type="reset" class="btn-reset" id="resetBtn">Clear Form</button>
+      </div>
+
+      <div class="status" id="status"></div>
+
+      <p class="note">
+        Fields marked <span class="req">*</span> are required.<br />
+        Your details are sent directly to our WhatsApp: <strong>+234 803 333 3264</strong>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIGURATION
+   ========================================================= */
+const CONFIG = {
+  // WhatsApp number in international format, NO "+", NO spaces, NO leading zero.
+  // +234 803 333 3264  ->  2348033333264
+  WHATSAPP_NUMBER: "2348033333264"
+};
+/* ========================================================= */
+
+
+/* ---------- Element references ---------- */
+const form       = document.getElementById("regForm");
+const submitBtn  = document.getElementById("submitBtn");
+const resetBtn   = document.getElementById("resetBtn");
+const statusBox  = document.getElementById("status");
+
+/* ---------- Required fields (id, wrapper id, friendly label) ---------- */
+const REQUIRED_FIELDS = [
+  { id: "fullNames",    wrap: "f_fullNames",    label: "Full Names" },
+  { id: "email",        wrap: "f_email",        label: "Email Address" },
+  { id: "lga",          wrap: "f_lga",          label: "Local Government of Origin" },
+  { id: "location",     wrap: "f_location",     label: "Present Location / Residence" },
+  { id: "occupation",   wrap: "f_occupation",   label: "Occupation" },
+  { id: "nokName",      wrap: "f_nokName",      label: "Next of Kin" },
+  { id: "nokPhone",     wrap: "f_nokPhone",     label: "Next of Kin Phone No." },
+  { id: "nokLocation",  wrap: "f_nokLocation",  label: "Next of Kin Location" },
+  { id: "relationship", wrap: "f_relationship", label: "Relationship with Next of Kin" }
+];
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+
+function val(id) {
+  return ($(id).value || "").trim();
+}
+
+function setStatus(message, type = "info") {
+  statusBox.className = "status show " + type;
+  statusBox.innerHTML = message;
+}
+
+function clearStatus() {
+  statusBox.className = "status";
+  statusBox.innerHTML = "";
+}
+
+function clearErrors() {
+  REQUIRED_FIELDS.forEach(f => $(f.wrap).classList.remove("error"));
+}
+
+function markError(wrapId) {
+  $(wrapId).classList.add("error");
+}
+
+/* Basic phone check: at least 10 digits after stripping non-numeric chars */
+function isValidPhone(phone) {
+  const digits = phone.replace(/\D/g, "");
+  return digits.length >= 10 && digits.length <= 15;
+}
+
+/* Basic email check */
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
+
+/* =========================================================
+   VALIDATION
+   ========================================================= */
+function validate() {
+  clearErrors();
+  const problems = [];
+
+  REQUIRED_FIELDS.forEach(field => {
+    const value = val(field.id);
+
+    if (!value) {
+      markError(field.wrap);
+      problems.push(field.label + " is required.");
+      return;
+    }
+
+    if (field.id === "email" && !isValidEmail(value)) {
+      markError(field.wrap);
+      problems.push("Email Address is not valid.");
+    }
+
+    if (field.id === "nokPhone" && !isValidPhone(value)) {
+      markError(field.wrap);
+      problems.push("Next of Kin Phone No. is not valid (10–15 digits).");
+    }
+  });
+
+  if (problems.length) {
+    setStatus("⚠️ Please correct the following:<br>• " + problems.join("<br>• "), "error");
+
+    // Scroll to the first error
+    const firstError = document.querySelector(".field.error");
+    if (firstError) {
+      firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+      const input = firstError.querySelector("input, select, textarea");
+      if (input) setTimeout(() => input.focus(), 320);
+    }
+    return false;
+  }
+
+  return true;
+}
+
+/* =========================================================
+   COLLECT DATA
+   ========================================================= */
+function collectData() {
+  return {
+    fullNames:    val("fullNames"),
+    email:        val("email"),
+    lga:          val("lga"),
+    location:     val("location"),
+    occupation:   val("occupation"),
+    marital:      val("marital") || "Not stated",
+    nokName:      val("nokName"),
+    nokPhone:     val("nokPhone"),
+    nokLocation:  val("nokLocation"),
+    relationship: val("relationship"),
+    submittedAt:  new Date().toLocaleString("en-GB", {
+      day: "2-digit", month: "short", year: "numeric",
+      hour: "2-digit", minute: "2-digit"
+    })
+  };
+}
+
+/* =========================================================
+   BUILD THE WHATSAPP MESSAGE  (nicely arranged)
+   ========================================================= */
+function buildWhatsAppMessage(d) {
+  const line = "━━━━━━━━━━━━━━━━━━━━━━";
+
+  return (
+    "*📋 MEMBER REGISTRATION FORM*\n" +
+    line + "\n\n" +
+
+    "*👤 PERSONAL DETAILS*\n" +
+    "• *Full Names:* " + d.fullNames + "\n" +
+    "• *Email:* " + d.email + "\n" +
+    "• *Local Govt. of Origin:* " + d.lga + "\n" +
+    "• *Present Location:* " + d.location + "\n" +
+    "• *Occupation:* " + d.occupation + "\n" +
+    "• *Marital Status:* " + d.marital + "\n\n" +
+
+    "*👥 NEXT OF KIN*\n" +
+    "• *Full Name:* " + d.nokName + "\n" +
+    "• *Phone No.:* " + d.nokPhone + "\n" +
+    "• *Location:* " + d.nokLocation + "\n" +
+    "• *Relationship:* " + d.relationship + "\n\n" +
+
+    line + "\n" +
+    "*🕒 Submitted:* " + d.submittedAt + "\n" +
+    line
+  );
+}
+
+/* =========================================================
+   OPEN WHATSAPP
+   ========================================================= */
+function openWhatsApp(message) {
+  const url = "https://wa.me/" + CONFIG.WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+  window.open(url, "_blank");
+}
+
+/* =========================================================
+   FORM SUBMIT
+   ========================================================= */
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  clearStatus();
+
+  if (!validate()) return;
+
+  const data = collectData();
+
+  // Loading state
+  submitBtn.disabled = true;
+  submitBtn.classList.add("loading");
+  setStatus("⏳ Preparing your information for WhatsApp…", "info");
+
+  // Open WhatsApp with the formatted message
+  openWhatsApp(buildWhatsAppMessage(data));
+
+  // Feedback
+  setStatus(
+    "✅ <strong>Success!</strong> WhatsApp has been opened in a new tab.<br>" +
+    "Press <strong>Send</strong> in WhatsApp to deliver your details to <strong>+234 803 333 3264</strong>.",
+    "success"
+  );
+
+  // Reset loading state
+  submitBtn.disabled = false;
+  submitBtn.classList.remove("loading");
+
+  // Clear the form
+  form.reset();
+});
+
+/* =========================================================
+   RESET
+   ========================================================= */
+resetBtn.addEventListener("click", function () {
+  clearErrors();
+  clearStatus();
+});
+
+/* Clear a field's error as soon as the user types a valid value */
+REQUIRED_FIELDS.forEach(field => {
+  const el = $(field.id);
+  const evt = el.tagName === "SELECT" ? "change" : "input";
+  el.addEventListener(evt, () => {
+    const value = val(field.id);
+
+    if (field.id === "email") {
+      if (isValidEmail(value)) $(field.wrap).classList.remove("error");
+    } else if (field.id === "nokPhone") {
+      if (isValidPhone(value)) $(field.wrap).classList.remove("error");
+    } else if (value) {
+      $(field.wrap).classList.remove("error");
+    }
+  });
+});
+</script>
+</body>
+</html>
